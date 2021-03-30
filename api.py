@@ -11,7 +11,7 @@ model = joblib.load('cluster.pkl')
 @app.route('/')
 def home():
     logging.info('Hello')
-    print('HHHHH', file=sys.stderr)
+    print('HELLO', file=sys.stderr)
     return 'Hello World'
 
 
@@ -20,10 +20,27 @@ def predict():
     print('Start!')
     data = request.get_json()
     print('data', data)
-    duration = 0.0
-    for v in data.values():
-        duration = v
-    prediction = model.predict(np.mat([[duration, 1]]))
+    # duration = 0.0
+    # for v in data.values():
+    #     duration = v
+
+    # 写入data.txt，追加模式'a'
+    file = open('data.txt', 'a')
+    file.writelines(['\n', str(data['duration'])])
+    file.close()
+
+    # 写入collect.txt
+    file = open('collect.txt', 'a')
+    file.writelines(['\n', str(data['duration']), ',',
+                     str(data['sizeAtDown']), ',',
+                     str(data['sizeAtUp']), ',',
+                     str(data['sizeAvg']), ',',
+                     str(data['pressureAtDown']), ',',
+                     str(data['pressureAtUp']), ',',
+                     str(data['pressureAvg'])])
+    file.close()
+
+    prediction = model.predict(np.mat([[data['duration'], 1]]))
     output = {
         'result': int(prediction[0])
     }

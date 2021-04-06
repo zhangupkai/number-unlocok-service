@@ -5,7 +5,7 @@ import logging
 import sys
 
 app = Flask(__name__)
-model = joblib.load('cluster.pkl')
+model = joblib.load('model/cluster.pkl')
 
 
 @app.route('/')
@@ -25,12 +25,12 @@ def predict():
     #     duration = v
 
     # 写入data.txt，追加模式'a'
-    file = open('data.txt', 'a')
+    file = open('data/data.txt', 'a')
     file.writelines(['\n', str(data['duration'])])
     file.close()
 
     # 写入collect.txt
-    file = open('collect.txt', 'a')
+    file = open('data/collect.txt', 'a')
     file.writelines(['\n', str(data['duration']), ',',
                      str(data['sizeAtDown']), ',',
                      str(data['sizeAtUp']), ',',

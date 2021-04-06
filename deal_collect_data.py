@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-data = pd.read_csv('collect.txt', header=None,
+data = pd.read_csv('data/collect.txt', header=None,
                    names=['duration', 'sizeAtDown', 'sizeAtUp', 'sizeAvg',
                           'pressureAtDown', 'pressureAtUp', 'pressureAvg'])
 features = np.array(data)

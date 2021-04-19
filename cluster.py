@@ -7,7 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # data = pd.read_csv('data.txt', header=None, names=['Duration'])
-data = pd.read_csv('data/collect40+40.txt', header=None)
+data = pd.read_csv('data/txt/collect40+40.txt', header=None)
 # data.insert(1, 'Other', 1)
 print(data.head())
 

@@ -21,12 +21,12 @@ def collect():
     data = request.get_json()
     print(data)
     # 写入data.txt，追加模式'a'
-    file = open('data/data.txt', 'a')
+    file = open('data/txt/data.txt', 'a')
     file.writelines(['\n', str(data['duration'])])
     file.close()
 
     # 写入collect.txt
-    file = open('data/collect.txt', 'a')
+    file = open('data/txt/collect.txt', 'a')
     file.writelines(['\n', str(data['duration']), ',',
                      str(data['sizeAtDown']), ',',
                      str(data['sizeAtUp']), ',',
@@ -36,6 +36,7 @@ def collect():
                      str(data['pressureAvg'])])
     file.close()
 
+    # 设置密码时反馈当前按键是重按还是轻按
     model = joblib.load('model/cluster.pkl')
     prediction = model.predict(np.mat([[data['duration'], data['sizeAvg']]]))
     output = {
@@ -49,28 +50,6 @@ def predict():
     print('predict')
     data = request.get_json()
     print('data', data)
-    # duration = 0.0
-    # for v in data.values():
-    #     duration = v
-
-    # # 写入data.txt，追加模式'a'
-    # file = open('data/data.txt', 'a')
-    # file.writelines(['\n', str(data['duration'])])
-    # file.close()
-    #
-    # # 写入collect.txt
-    # file = open('data/collect.txt', 'a')
-    # file.writelines(['\n', str(data['duration']), ',',
-    #                  str(data['sizeAtDown']), ',',
-    #                  str(data['sizeAtUp']), ',',
-    #                  str(data['sizeAvg']), ',',
-    #                  str(data['pressureAtDown']), ',',
-    #                  str(data['pressureAtUp']), ',',
-    #                  str(data['pressureAvg'])])
-    # file.close()
-
-    # 0 成功，1 失败
-    res = os.system('python cluster.py')
 
     model = joblib.load('model/cluster.pkl')
     prediction = model.predict(np.mat([[data['duration'], data['sizeAvg']]]))

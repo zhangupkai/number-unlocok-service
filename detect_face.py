@@ -26,22 +26,35 @@ def face_detect(image):
     # cv2.destroyAllWindows()
 
     eye_detector = cv2.CascadeClassifier('xml/haarcascade_eye.xml')
+    pupil_detector = cv2.CascadeClassifier('xml/haarcascade_eye_tree_eyeglasses.xml')
     # 基于之前的人脸检测
     for x, y, width, height in faces:
         cv2.rectangle(image, (x, y), (x + width, y + height), (0, 0, 255), 3, cv2.LINE_8, 0)
 
-        roi = image[y:y+height, x:x+width]
+        roi = image[y:y + height, x:x + width]
         eyes = eye_detector.detectMultiScale(roi, scaleFactor=1.1, minNeighbors=2, minSize=(150, 150))
+        pupils = pupil_detector.detectMultiScale(roi, scaleFactor=1.1, minNeighbors=2)
+        print(eyes)
+        print(pupils)
 
-        for ex, ey, ewidth, eheight in eyes:
-            cv2.rectangle(roi, (ex, ey), (ex + ewidth, ey + eheight), (255, 0, 0), 3, cv2.LINE_8, 0)
+        # for ex, ey, ewidth, eheight in eyes:
+        #     cv2.rectangle(roi, (ex, ey), (ex + ewidth, ey + eheight), (255, 0, 0), 3, cv2.LINE_8, 0)
+        #     cv2.circle(roi, (ex + int(ewidth / 2), ey + int(eheight / 2)), 2, (255, 255, 0), 3, cv2.LINE_8, 0)
 
-    cv2.imshow('face', image)
-    cv2.imwrite('result/face/face.jpg', image)
+        for px, py, pwidth, pheight in pupils:
+            cv2.rectangle(roi, (px, py), (px + pwidth, py + pheight), (0, 255, 255), 3, cv2.LINE_8, 0)
+            # 瞳孔中心坐标
+            center_x, center_y = px + int(pwidth / 2), py + int(pheight / 2)
+            cv2.rectangle(roi, (center_x - 120, center_y - 40), (center_x + 120, center_y + 40), (255, 0, 0), 3, cv2.LINE_8, 0)
+            cv2.circle(roi, (center_x, center_y), 2, (0, 255, 0), 3, cv2.LINE_8, 0)
+
+    # cv2.imshow('face', image)
+    # TODO frame100 图片没法处理
+    cv2.imwrite('result/face/face100.jpg', image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
-    image_path = cv2.imread('data/frame/frame1.jpg')
+    image_path = cv2.imread('data/frame/frame100.jpg')
     face_detect(image_path)

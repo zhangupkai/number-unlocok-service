@@ -15,8 +15,9 @@ def video2frame(videos_path, frames_save_path, time_interval):
         success, image = vidcap.read()
         count += 1
         if count % time_interval == 0:
-            image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
-            cv2.imencode('.jpg', image)[1].tofile(frames_save_path + "/frame%d.jpg" % count)
+            if image is not None:
+                image = cv2.rotate(image, cv2.ROTATE_90_COUNTERCLOCKWISE)
+                cv2.imencode('.jpg', image)[1].tofile(frames_save_path + "/frame%d.jpg" % count)
         # if count == 20:
         #   break
     print(count)

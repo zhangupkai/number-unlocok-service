@@ -11,7 +11,6 @@ data = pd.read_csv('data/txt/collect40+40.txt', header=None)
 # data.insert(1, 'Other', 1)
 print(data.head())
 
-# data.plot(kind='scatter', x='Duration', y='none', figsize=(12, 8))
 origin_X = np.array(data)
 X = origin_X[:, [0, 3]]
 plt.scatter(X[:, 0], X[:, 1])

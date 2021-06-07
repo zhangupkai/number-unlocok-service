@@ -15,7 +15,7 @@ def home():
     return 'Hello World'
 
 
-@app.route('/collect', methods=['POST'])
+@app.route('/collect_and_judge', methods=['POST'])
 def collect():
     print('collect')
     data = request.get_json()
@@ -41,6 +41,24 @@ def collect():
     prediction = model.predict(np.mat([[data['duration'], data['sizeAvg']]]))
     output = {
         'result': int(prediction[0])
+    }
+    return jsonify(output)
+
+
+@app.route('/scenes_collect_and_judge', methods=['POST'])
+def scenes_collect_and_judge():
+    print('collect')
+    data = request.get_json()
+    print(data)
+    # 写入data.txt，追加模式'a'
+    file = open('data/txt/scenes_collect.txt', 'a')
+    file.writelines('\n')
+    for duration in data['durationList']:
+        file.writelines([str(duration), ','])
+    file.close()
+
+    output = {
+        'result': str('0000')
     }
     return jsonify(output)
 

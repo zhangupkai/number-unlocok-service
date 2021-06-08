@@ -1,6 +1,7 @@
 from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
 import pandas as pd
+import joblib
 import matplotlib.pyplot as plt
 
 with open('data/txt/scenes_collect.txt') as file:
@@ -21,10 +22,10 @@ with open('data/txt/scenes_collect.txt') as file:
 data = pd.read_csv('data/txt/scenes_training_data.txt', header=None)
 data = np.array(data)
 
-X_train = np.array(data[:-2, 0]).reshape(-1, 1)
-y_train = data[:-2, 1]
-X_test = np.array(data[-2:, 0]).reshape(-1, 1)
-y_test = data[-2:, 1]
+X_train = np.array(data[:-5, 0]).reshape(-1, 1)
+y_train = data[:-5, 1]
+X_test = np.array(data[-5:, 0]).reshape(-1, 1)
+y_test = data[-5:, 1]
 
 print(X_train.shape)
 print(y_train.shape)
@@ -39,10 +40,12 @@ probability = knn.predict_proba(X_test)
 # 计算与最后一个测试样本距离在最近的5个点，返回的是这些样本的序号组成的数组
 # neighbor_point = knn.kneighbors(np.array(X_test[-1]).reshape(1, -1), 5, False)
 # 调用该对象的打分方法，计算出准确率
-# score = knn.score(X_test, y_test, sample_weight=None)
+score = knn.score(X_test, y_test, sample_weight=None)
+
+joblib.dump(knn, 'model/scenes_force_judge.pkl')
 
 print('y_predict: ', y_predict)
 print('y_test: ', y_test)
-# print('Accuracy: ', score)
+print('Accuracy: ', score)
 # print('neighbor_point of last test sample:', neighbor_point)
-print('probability: ', probability)
+# print('probability: ', probability)

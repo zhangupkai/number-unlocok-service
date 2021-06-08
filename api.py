@@ -50,6 +50,7 @@ def scenes_collect_and_judge():
     print('collect')
     data = request.get_json()
     print(data)
+
     # 写入data.txt，追加模式'a'
     file = open('data/txt/scenes_collect.txt', 'a')
     file.writelines('\n')
@@ -57,8 +58,20 @@ def scenes_collect_and_judge():
         file.writelines([str(duration), ','])
     file.close()
 
+    duration_mean = np.mean(data['durationList'])
+    print('duration_mean: ', duration_mean)
+
+    # 解锁时根据当前平均按压力度判断重按
+    model = joblib.load('model/scenes_force_judge.pkl')
+    result = ''
+    for duration in data['durationList']:
+        above_rate = (duration - duration_mean) / duration_mean
+        cur_res = model.predict(np.array(above_rate).reshape(-1, 1))
+        result += str(int(cur_res[0]))
+
+    print('result', result)
     output = {
-        'result': str('0000')
+        'result': result
     }
     return jsonify(output)
 
